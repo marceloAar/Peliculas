@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8"/>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<title>Busqueda de Peliculas</title>
+</head>
+<body>
+
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container-fluid">
+			<h2 class="navbar-brand">BUSQUEDA DE PELICULAS</h2>			
+			<a th:href="@{/pelis/busca}" class="btn btn-outline-success">Home</a>			
+		</div>
+	</nav>
+
+	<div class="container mt-3">	
+	
+	<form class="d-flex flex-row justify-content-between mx-auto" action="/pelis/busca/filtrado" method="post">
+					
+			<select class="form-select m-2" name="idCat">
+				<option th:value="0" selected>Seleccione Categoría</option>
+				<option th:each="categoria : ${categorias}"
+					th:text="${categoria.name}" th:value="${categoria.categoryId}" />
+			</select>
+			
+			<input class="form-control m-2" type="text" placeholder="Ingrese Titulo" name="titulo">				
+			<button type="submit" class="btn btn-primary m-2">Buscar</button>
+			
+	</form>		
+		
+<table class="table table-striped mt-3" >
+  <thead>
+    <tr>
+      <th scope="col">Categoria</th>
+      <th scope="col">ID Pelicula</th>
+      <th scope="col">Titulo</th>
+      <th scope="col">Duracion</th>
+      <th scope="col">Rating</th>
+      <th scope="col">Precio</th>
+      <th scope="col">Duracion Arriendo</th>
+       <th scope="col">Accion</th>
+    </tr>
+  </thead>
+  <tbody> 
+  
+    <tr th:each="pelicula:${peliculas}">    
+    
+     <td th:text="${pelicula.listaCategoria[0].name}" />
+     <td th:text="${pelicula.filmId}" />      
+     <td th:text="${pelicula.title}" />
+     <td th:text="${pelicula.length}" />
+     <td th:text="${pelicula.rating}" />
+     <td th:text="${pelicula.replacementCost}" />
+     <td th:text="${pelicula.rentalRate}" /> 
+     <td> <a th:href="@{/pelis/busca/}+@{verPeli/}+${pelicula.filmId}" class="btn btn-info">Ver </a></td>  
+    </tr>
+    
+  </tbody>
+</table>
+
+<!-- MOSTRANDO LAS PAGINAS -->
+	<div>
+		<span th:each="indice: ${#numbers.sequence(1, totalPaginas)}"><!-- ITERAMOS PARA MOSTRAR EL NUMERO DE CADA PAGINA -->
+		<!-- SI EL USUARIO NO ESTÄ EN LA PAGINA SE MUESTRA EL LINK PARA ACCEDER A ELLA -->
+		<a th:if="${paginaActual != indice}" th:href="@{'/pelis/busca/' + ${indice}}" th:text="${indice}"></a>
+		<!-- SI EL USUARIO ESTÄ EN LA PAGINA SOLO SE MUESTRA TEXTO CON EL NUMERO -->
+		<span th:unless="${paginaActual != indice}" th:text="${indice}"></span>
+		</span>
+	</div>
+	
+</div>
+
+<footer class="bg-dark text-white">
+	<div class="container p-4">
+		<div class="text-center">
+			<small>Copyright ©m4R{ 2022. / Desarrollo de Aplicaciones Full Stack JAVA.</small>
+		</div>
+	</div>
+</footer>	
+	
+<script	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+		crossorigin="anonymous"></script>
+</body>
+</html>
